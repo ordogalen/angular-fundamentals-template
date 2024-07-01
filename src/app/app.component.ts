@@ -86,7 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
     - Subscribe to changes
     - Check the received value using the areAllValuesTrue function and pass them to the isLoading variable. */
     // YOUR CODE STARTS HERE
-    combineLatest([
+    const loadingState = combineLatest([
         this.mockDataService.getCharactersLoader(),
         this.mockDataService.getPlanetLoader()])
       .pipe(
@@ -96,12 +96,15 @@ export class AppComponent implements OnInit, OnDestroy {
       ).subscribe(isLoading => {
         this.isLoading = isLoading;
       })
+
+      this.subscriptions.push(loadingState)
     }
 
   ngOnDestroy(): void {
     // 5.2 Unsubscribe from all subscriptions
     // YOUR CODE STARTS HERE
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions = []
     // YOUR CODE ENDS HERE
   }
 
