@@ -1,4 +1,4 @@
-<button class="app-button">
+<button  [type]="type" [disabled]="disabled" class="app-button">
   <fa-icon *ngIf="iconName" [icon] = "iconName"></fa-icon>
   {{ buttonText }}
 </button>
