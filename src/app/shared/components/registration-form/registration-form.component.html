@@ -1,28 +1,47 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <div class="registration-form">
+  <form [formGroup]="registrationForm" (ngSubmit)="onFormSubmit()">
+    <div class="registration-form">
     <div>
       <div class="form__control">
         <label for="name">Name</label>
         <!--Use the name `name` for the form control.-->
-        <input type="text" id="name" placeholder="Input text"/>
-        <span id="nameErrorMessage" class="text-danger">Name is required.</span>
-      </div>
+        <input type="text" id="name" name="name" placeholder="Input text" formControlName="name"/>
+        <span id="nameErrorMessage" class="text-danger" *ngIf="registrationForm.get('name')?.errors?.['required'] && (registrationForm.get('name')?.dirty || registrationForm.get('name')?.touched)">
+          This field is required
+        </span>
+        <span id="nameErrorMessage" class="text-danger" *ngIf="registrationForm.get('name')?.errors?.['minlength'] && (registrationForm.get('name')?.dirty || registrationForm.get('name')?.touched)">
+          Name must be at least 6 characters
+        </span>
+          </div>
       <div class="form__control">
         <!--Use the name `email` for the form control.-->
         <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Input text"/>
-        <span id="emailErrorMessage" class="text-danger">Email is required.</span>
-      </div>
+        <input type="text" id="email" name="email" placeholder="Input text" formControlName="email"/>
+        <span  id="emailErrorMessage" class="text-danger" *ngIf="registrationForm.get('email')?.errors?.['required'] && (registrationForm.get('email')?.dirty || registrationForm.get('email')?.touched)">
+          Email is required.
+        </span>
+        <span id="emailErrorMessage" class="text-danger" *ngIf="registrationForm.get('email')?.errors?.['invalidEmail'] && (registrationForm.get('email')?.dirty || registrationForm.get('email')?.touched)">
+          Please enter a valid email.
+        </span>
+          </div>
       <div class="form__control">
         <!--Use the name `password` for the form control.-->
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Input text"/>
-        <span id="passwordErrorMessage" class="text-danger">Password is required.</span>
+        <input type="password" id="password" name="password" placeholder="Input text" formControlName="password"/>
+        <span id="passwordErrorMessage" class="text-danger" *ngIf="registrationForm.get('password')?.errors?.['required'] && (registrationForm.get('password')?.dirty || registrationForm.get('password')?.touched)">
+          Password is required.
+        </span>
+        </div>
+    </div>
+    <div>
+      <div class="form__action">
+        <app-button buttonText="Register" type="submit"></app-button>
+      </div>
+      <div class="form__text">
+        If you have an account you may <strong>Login</strong>
       </div>
     </div>
-    <div class="form__action">
-      <app-button></app-button>
-    </div>
   </div>
+  </form>
 </div>
