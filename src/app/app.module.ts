@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '@shared/shared.module';
@@ -10,6 +10,14 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { CoursesService } from '@app/services/courses.service';
 import { CoursesComponent } from './features/courses/courses.component';
 import { CoursesListComponent } from './features/courses/courses-list/courses-list.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { TokenInterceptor } from './auth/interceptors/token.interceptor';
+
+export const WINDOW = new InjectionToken<Window>('Window', {
+  providedIn: 'root',
+  factory: () => window
+});
 
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent, CoursesComponent, CoursesListComponent],
@@ -17,8 +25,13 @@ import { CoursesListComponent } from './features/courses/courses-list/courses-li
     BrowserModule,
     SharedModule,
     FontAwesomeModule,
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [AuthorizedGuard, NotAuthorizedGuard, CoursesService, CoursesStoreService],
+  providers: [AuthorizedGuard, NotAuthorizedGuard, CoursesService, CoursesStoreService,
+    { provide: WINDOW, useFactory: () => window },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
