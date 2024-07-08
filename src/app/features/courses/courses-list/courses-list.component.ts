@@ -1,28 +1,35 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Router } from "@angular/router";
+import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CourseDTO } from "@app/services/model/course.model";
 
 @Component({
-  selector: 'app-courses-list',
-  templateUrl: './courses-list.component.html',
-  styleUrls: ['./courses-list.component.scss']
+  selector: "app-courses-list",
+  templateUrl: "./courses-list.component.html",
+  styleUrls: ["./courses-list.component.scss"],
 })
 export class CoursesListComponent {
-
-  @Input() courses!: any[]; // TODO: Make it proper course object
-  @Input() editable!: boolean;
+  @Input() courses!: any[];
+  @Input() editable: boolean | null = false;
 
   @Output() showCourse = new EventEmitter<void>();
   @Output() editCourse = new EventEmitter<void>();
   @Output() deleteCourse = new EventEmitter<void>();
 
-  handleShowCourse() {
-    console.log("Not yet implemented");
+  constructor(
+    private router: Router,
+    private coursesStoreService: CoursesStoreService
+  ) {}
+
+  handleShowCourse(courseId: string) {
+    this.router.navigate(["/courses/" + courseId]);
   }
-  
-  handleEditCourse(course: any) {
-    console.log("Not yet implemented: ", course);
+
+  handleEditCourse(courseId: string) {
+    this.router.navigate(["/courses/edit/" + courseId]);
   }
-  
-  handleDeleteCourse(course: any) {
-    console.log("Not yet implemented: ", course);
+
+  handleDeleteCourse(courseId: string) {
+    this.coursesStoreService.deleteCourse(courseId);
   }
 }

@@ -1,0 +1,12 @@
+.search_with_add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust the space between the search bar and the button */
+}
