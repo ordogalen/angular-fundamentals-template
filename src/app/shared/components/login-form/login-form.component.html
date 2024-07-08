@@ -22,12 +22,13 @@
       </div>
       <div>
         <div class="form__action">
-          <app-button buttonText="Login" type="submit"></app-button>
+          <app-button buttonText="Login" type="submit" [disabled]="loginForm.invalid || isLoading"></app-button>
         </div>
         <div class="form__text">
-          If you don't have an account you may <strong>Registration</strong>
+          If you don't have an account you may <strong> <a href="register">Registration</a></strong>
         </div>
       </div>
     </div>
   </form>
 </div>
+<app-modal [showModal]="showModal" [title]="modalTitle" [message]="modalMessage" (close)="closeModal()"></app-modal>

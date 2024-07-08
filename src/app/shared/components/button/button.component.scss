@@ -25,4 +25,8 @@
     &:active {
         background-color: #016486;
       }
+
+}
+.app-button:disabled {
+    opacity: 0.3;
 }

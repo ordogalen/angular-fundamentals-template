@@ -32,16 +32,20 @@
         <span id="passwordErrorMessage" class="text-danger" *ngIf="registrationForm.get('password')?.errors?.['required'] && (registrationForm.get('password')?.dirty || registrationForm.get('password')?.touched)">
           Password is required.
         </span>
+        <span id="passwordErrorMessage" class="text-danger" *ngIf="registrationForm.get('password')?.errors?.['minlength'] && (registrationForm.get('password')?.dirty || registrationForm.get('password')?.touched)">
+          Password must be at least 6 characters
+        </span>
         </div>
     </div>
     <div>
       <div class="form__action">
-        <app-button buttonText="Register" type="submit"></app-button>
+        <app-button buttonText="Register" type="submit" [disabled]="registrationForm.invalid || isLoading" ></app-button>
       </div>
       <div class="form__text">
-        If you have an account you may <strong>Login</strong>
+        If you have an account you may <strong><a href="login">Login</a></strong>
       </div>
     </div>
   </div>
   </form>
 </div>
+<app-modal [showModal]="showModal" [title]="modalTitle" [message]="modalMessage" (close)="closeModal()"></app-modal>
