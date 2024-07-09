@@ -6,15 +6,19 @@ import { CourseInfoComponent } from './features/course-info/course-info.componen
 import { NotAuthorizedGuard } from './auth/guards/not-authorized.guard';
 import { AuthorizedGuard } from './auth/guards/authorized.guard';
 import { AdminGuard } from './user/guards/admin.guard';
+import { CoursesListComponent } from './features/courses/courses-list/courses-list.component';
+
 
 const routes: Routes = [
-    {path: "login", component: LoginFormComponent, canActivate: [NotAuthorizedGuard]},
-    {path: "register", component: RegistrationFormComponent, canActivate: [NotAuthorizedGuard]},
-    {path: "courses", component: CoursesComponent, canActivate: [AuthorizedGuard] },
-    {path: "", component: CoursesComponent, canActivate: [AuthorizedGuard] },
-    {path: "courses/add", component: CourseFormComponent, canActivate: [AdminGuard] },
-    {path: "courses/:id", component: CourseInfoComponent, canActivate: [AuthorizedGuard] },
-    {path: "courses/edit/:id", component: CourseFormComponent, canActivate: [AdminGuard] },
+  { path: 'login', component: LoginFormComponent, canActivate: [NotAuthorizedGuard] },
+  { path: 'register', component: RegistrationFormComponent, canActivate: [NotAuthorizedGuard] },
+  {
+    path: 'courses',
+    loadChildren: () => import('./features/courses/courses.module').then(m => m.CoursesModule),
+    canActivate: [AuthorizedGuard]
+  },
+  { path: '', redirectTo: '/courses', pathMatch: 'full' },
+  { path: '**', redirectTo: '/courses' }
 ];
 
 @NgModule({
