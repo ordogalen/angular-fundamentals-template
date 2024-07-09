@@ -1,15 +1,144 @@
-import { Action } from '@ngrx/store';
-
-// Add your code here
+import { Course, CourseDTO } from "@app/services/model/course.model";
+import { Action, createReducer, on } from "@ngrx/store";
+import {
+  requestAllCourses,
+  requestAllCoursesFail,
+  requestAllCoursesSuccess,
+  requestCreateCourse,
+  requestCreateCourseFail,
+  requestCreateCourseSuccess,
+  requestDeleteCourse,
+  requestDeleteCourseFail,
+  requestDeleteCourseSuccess,
+  requestEditCourse,
+  requestEditCourseFail,
+  requestEditCourseSuccess,
+  requestFilterCourse,
+  requestFilterCourseFail,
+  requestFilterCourseSuccess,
+  requestSingleCourse,
+  requestSingleCourseFail,
+  requestSingleCourseSuccess,
+} from "./courses.actions";
 
 export interface CoursesState {
-    // Add your code here
+  allCourses: CourseDTO[];
+  course: CourseDTO;
+  isAllCoursesLoading: boolean;
+  isSingleCourseLoading: boolean;
+  isSearchState: boolean;
+  errorMessage: string;
 }
 
 export const initialState: CoursesState = {
-    // Add your code here
+  allCourses: [],
+  course: {},
+  isAllCoursesLoading: false,
+  isSingleCourseLoading: false,
+  isSearchState: false,
+  errorMessage: "",
 };
 
-export const coursesReducer; // Add your code here
+export const coursesReducer = createReducer(
+  initialState,
+  on(requestAllCourses, (state) => ({
+    ...state,
+    isAllCoursesLoading: true,
+    errorMessage: "",
+  })),
+  on(requestAllCoursesSuccess, (state, { courses }) => ({
+    ...state,
+    allCourses: courses,
+    isAllCoursesLoading: false,
+  })),
+  on(requestAllCoursesFail, (state, { error }) => ({
+    ...state,
+    isAllCoursesLoading: false,
+    errorMessage: error,
+  })),
 
-export const reducer = (state: CoursesState, action: Action): CoursesState => coursesReducer(state, action);
+  on(requestSingleCourse, (state, { id }) => ({
+    ...state,
+    isSingleCourseLoading: true,
+    errorMessage: "",
+  })),
+  on(requestSingleCourseSuccess, (state, { course }) => ({
+    ...state,
+    course: course,
+    isSingleCourseLoading: false,
+  })),
+  on(requestSingleCourseFail, (state, { error }) => ({
+    ...state,
+    isSingleCourseLoading: false,
+    errorMessage: error,
+  })),
+
+  on(requestFilterCourse, (state, { title }) => ({
+    ...state,
+    isAllCoursesLoading: true,
+    errorMessage: "",
+  })),
+  on(requestFilterCourseSuccess, (state, { courses }) => ({
+    ...state,
+    allCourses: courses,
+    isAllCoursesLoading: false,
+  })),
+  on(requestFilterCourseFail, (state, { error }) => ({
+    ...state,
+    isAllCoursesLoading: false,
+    errorMessage: error,
+  })),
+
+  on(requestDeleteCourse, (state, { id }) => ({
+    ...state,
+    isAllCoursesLoading: true,
+    errorMessage: "",
+  })),
+  on(requestDeleteCourseSuccess, (state, { id }) => ({
+    ...state,
+    allCourses: state.allCourses.filter((course) => course.id !== id),
+    isAllCoursesLoading: false,
+  })),
+  on(requestDeleteCourseFail, (state, { error }) => ({
+    ...state,
+    isAllCoursesLoading: false,
+    errorMessage: error,
+  })),
+
+  on(requestEditCourse, (state, { id, course }) => ({
+    ...state,
+    isSingleCourseLoading: true,
+    errorMessage: "",
+  })),
+  on(requestEditCourseSuccess, (state, { course }) => ({
+    ...state,
+    courses: course,
+    isSingleCourseLoading: false,
+  })),
+  on(requestEditCourseFail, (state, { error }) => ({
+    ...state,
+    isSingleCourseLoading: false,
+    errorMessage: error,
+  })),
+
+  on(requestCreateCourse, (state, { course }) => ({
+    ...state,
+    isSingleCourseLoading: true,
+    errorMessage: "",
+  })),
+  on(requestCreateCourseSuccess, (state, { course }) => ({
+    ...state,
+    courses: course,
+    isSingleCourseLoading: false,
+  })),
+  on(requestCreateCourseFail, (state, { error }) => ({
+    ...state,
+    isSingleCourseLoading: false,
+    errorMessage: error,
+  }))
+);
+
+export const reducer = (state: CoursesState, action: Action): CoursesState =>
+  coursesReducer(state, action);
+
+export const coursesFeatureKey = "courses";
