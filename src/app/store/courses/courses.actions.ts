@@ -73,7 +73,7 @@ export const requestEditCourse = createAction(
 
 export const requestEditCourseSuccess = createAction(
   CoursesConstants.REQUEST_EDIT_COURSE_SUCCESS,
-  props<{ course: Course }>()
+  props<{ course: CourseDTO }>()
 );
 
 export const requestEditCourseFail = createAction(

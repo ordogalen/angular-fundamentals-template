@@ -53,7 +53,7 @@ export class CoursesService {
       );
   }
 
-  editCourse(id: string, course: Course) {
+  editCourse(id: string, course: Course): Observable<CourseDTO> {
     return this.http
       .put<{successful: boolean, result: any}>(environment.backend_uri + "/courses/" + id, course)
       .pipe(
