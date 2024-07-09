@@ -14,7 +14,7 @@ import {
   requestCreateCourse,
   requestDeleteCourse,
   requestEditCourse,
-  requestFilterCourse,
+  requestFilteredCourses ,
   requestSingleCourse,
 } from "./courses.actions";
 import { Course } from "@app/services/model/course.model";
@@ -41,7 +41,7 @@ export class CoursesStateFacade {
   }
 
   getFilteredCourse(title: string) {
-    return this.store.dispatch(requestFilterCourse({ title }));
+    return this.store.dispatch(requestFilteredCourses ({ title }));
   }
 
   editCourse(id: string, course: Course) {

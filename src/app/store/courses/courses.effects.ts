@@ -14,9 +14,9 @@ import {
   requestEditCourse,
   requestEditCourseFail,
   requestEditCourseSuccess,
-  requestFilterCourse,
-  requestFilterCourseFail,
-  requestFilterCourseSuccess,
+  requestFilteredCourses ,
+  requestFilteredCoursesFail,
+  requestFilteredCoursesSuccess,
   requestSingleCourse,
   requestSingleCourseFail,
   requestSingleCourseSuccess,
@@ -40,11 +40,11 @@ export class CoursesEffects {
 
   filteredCourses$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(requestFilterCourse),
+      ofType(requestFilteredCourses ),
       mergeMap((action) =>
         this.coursesService.filterCourses({ title: action.title }).pipe(
-          map((courses) => requestFilterCourseSuccess({ courses })),
-          catchError((error) => of(requestFilterCourseFail({ error })))
+          map((courses) => requestFilteredCoursesSuccess({ courses })),
+          catchError((error) => of(requestFilteredCoursesFail({ error })))
         )
       )
     )

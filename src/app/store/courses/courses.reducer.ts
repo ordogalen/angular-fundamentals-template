@@ -13,9 +13,9 @@ import {
   requestEditCourse,
   requestEditCourseFail,
   requestEditCourseSuccess,
-  requestFilterCourse,
-  requestFilterCourseFail,
-  requestFilterCourseSuccess,
+  requestFilteredCourses ,
+  requestFilteredCoursesFail,
+  requestFilteredCoursesSuccess,
   requestSingleCourse,
   requestSingleCourseFail,
   requestSingleCourseSuccess,
@@ -73,17 +73,17 @@ export const coursesReducer = createReducer(
     errorMessage: error,
   })),
 
-  on(requestFilterCourse, (state, { title }) => ({
+  on(requestFilteredCourses , (state, { title }) => ({
     ...state,
     isAllCoursesLoading: true,
     errorMessage: "",
   })),
-  on(requestFilterCourseSuccess, (state, { courses }) => ({
+  on(requestFilteredCoursesSuccess, (state, { courses }) => ({
     ...state,
     allCourses: courses,
     isAllCoursesLoading: false,
   })),
-  on(requestFilterCourseFail, (state, { error }) => ({
+  on(requestFilteredCoursesFail, (state, { error }) => ({
     ...state,
     isAllCoursesLoading: false,
     errorMessage: error,
