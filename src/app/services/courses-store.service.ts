@@ -98,33 +98,33 @@ export class CoursesStoreService {
       .subscribe();
   }
 
-  getCourse(courseId: string) {
-    this.coursesService
-      .getCourse(courseId)
-      .pipe(
-        switchMap((course) => {
-          if (course.authors && course.authors.length > 0) {
-            return forkJoin(
-              course.authors.map((authorId: string) =>
-                this.coursesService.getAuthorById(authorId)
-              )
-            ).pipe(
-              map((authors: any) => {
-                course.authors = authors;
-                return course;
-              })
-            );
-          }
-          return of(course);
-        }),
-        tap((course) => this.selectedCourse$$.next(course)),
-        catchError((error) => {
-          console.error("Error loading course:", error);
-          return of(null);
-        })
-      )
-      .subscribe();
-  }
+  // getCourse(courseId: string) {
+  //   this.coursesService
+  //     .getCourse(courseId)
+  //     .pipe(
+  //       switchMap((course) => {
+  //         if (course.authors && course.authors.length > 0) {
+  //           return forkJoin(
+  //             course.authors.map((authorId: string) =>
+  //               this.coursesService.getAuthorById(authorId)
+  //             )
+  //           ).pipe(
+  //             map((authors: any) => {
+  //               course.authors = authors;
+  //               return course;
+  //             })
+  //           );
+  //         }
+  //         return of(course);
+  //       }),
+  //       tap((course) => this.selectedCourse$$.next(course)),
+  //       catchError((error) => {
+  //         console.error("Error loading course:", error);
+  //         return of(null);
+  //       })
+  //     )
+  //     .subscribe();
+  // }
 
   editCourse(id: string, course: Course): void {
     this.isLoading$$.next(true);
