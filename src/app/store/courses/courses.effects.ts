@@ -79,7 +79,7 @@ export class CoursesEffects {
       ofType(requestEditCourse),
       mergeMap((action) =>
         this.coursesService.editCourse(action.id, action.course).pipe(
-          map((course) => requestEditCourseSuccess(course)),
+          map((course) => requestEditCourseSuccess({course})),
           catchError((error) => of(requestEditCourseFail({ error })))
         )
       )

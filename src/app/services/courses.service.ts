@@ -55,13 +55,31 @@ export class CoursesService {
 
   editCourse(id: string, course: Course) {
     return this.http
-      .put(environment.backend_uri + "/courses/" + id, course)
+      .put<{successful: boolean, result: any}>(environment.backend_uri + "/courses/" + id, course)
       .pipe(
-        map((response: any) => {
-          return response.result;
+        switchMap(response => {
+          if (response.successful && response.result) {
+            const course = response.result;
+            return forkJoin(
+              course.authors.map((authorId: string) => this.getAuthorById(authorId))
+            ).pipe(
+              map(authors => ({
+                id: course.id,
+                title: course.title,
+                description: course.description,
+                authors: authors,
+                duration: course.duration,
+                creationDate: course.creationDate
+              }))
+            );
+          } 
+          else {
+            return of({}); // Return null or an empty object as per your error handling strategy
+          }
         }),
-        catchError((error) => {
-          throw "Error in editting course: " + error.message;
+        catchError(error => {
+          console.error('Error in getting course:', error);
+          return throwError(() => new Error("Error in getting course: " + error.message));
         })
       );
   }

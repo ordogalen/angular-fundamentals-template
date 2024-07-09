@@ -110,11 +110,14 @@ export const coursesReducer = createReducer(
     isSingleCourseLoading: true,
     errorMessage: "",
   })),
-  on(requestEditCourseSuccess, (state, { course }) => ({
+  on(requestEditCourseSuccess, (state, { course }) => {
+    console.log('Previous state:', state);
+    console.log('Updated course:', course);  
+    return {
     ...state,
     courses: course,
-    isSingleCourseLoading: false,
-  })),
+    isSingleCourseLoading: false,}
+  }),
   on(requestEditCourseFail, (state, { error }) => ({
     ...state,
     isSingleCourseLoading: false,
