@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 import { Author, Course, CourseDTO } from "@app/services/model/course.model";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,6 +13,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
   styleUrls: ["./course-form.component.scss"],
 })
 export class CourseFormComponent {
+  selectedCourse$ = this.courseFacade.course$;
   courseForm!: FormGroup;
   courseId: string | null = null;
   nextId = 1; // Initialize ID counter
@@ -25,7 +27,8 @@ export class CourseFormComponent {
     private library: FaIconLibrary,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private coursesStoreService: CoursesStoreService
+    private coursesStoreService: CoursesStoreService,
+    private courseFacade: CoursesStateFacade
   ) {
     library.addIconPacks(fas);
     this.courseForm = this.fb.group({
@@ -50,12 +53,13 @@ export class CourseFormComponent {
   ngOnInit() {
     this.courseId = this.activatedRoute.snapshot.paramMap.get("id");
     if (this.courseId) {
-      this.coursesStoreService.getCourse(this.courseId);
-      this.coursesStoreService.selectedCourse$.subscribe((course) => {
+      this.courseFacade.getSingleCourse(this.courseId);
+      this.courseFacade.course$.subscribe(course => {
         if (course) {
+          console.log(course);
           this.populateForm(course);
         }
-      });
+      })
     }
   }
 
@@ -81,12 +85,12 @@ export class CourseFormComponent {
   onFormSubmit() {
     if (this.courseForm.valid) {
       if (this.courseId) {
-        this.coursesStoreService.editCourse(
+        this.courseFacade.editCourse(
           this.courseId,
           this.createCourseFromForm()
         );
       } else {
-        this.coursesStoreService.createCourse(this.createCourseFromForm());
+        this.courseFacade.createCourse(this.createCourseFromForm());
       }
       this.courseForm.reset();
       this.courseAuthors.clear();

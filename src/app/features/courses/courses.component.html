@@ -1,21 +1,25 @@
-<div *ngIf="isLoading" else #content>
+<div *ngIf="isLoading$ | async; else content">
   Loading...
 </div>
-<div #content>
-  <div class="search_with_add">
-    <div class="search-container">
-      <app-search (clickOnShow)="filterCourses($event)"></app-search>
-    </div>
-    <div class="add-container" *ngIf="isAdmin">
-      <app-button buttonText="Add new course" routerLink="/courses/add"></app-button>
-    </div>
+<ng-template #content>
+  <div *ngIf="allCourses$ | async as courses; else loading">
+    <ng-container *ngIf="courses.length > 0; else noCourses">
+      <div class="search_with_add">
+        <div class="search-container">
+          <app-search (clickOnShow)="filterCourses($event)"></app-search>
+        </div>
+        <div class="add-container" *ngIf="isAdmin">
+          <app-button buttonText="Add new course" routerLink="/courses/add"></app-button>
+        </div>
+      </div>
+      <app-courses-list [courses]="courses" [editable]="isAdmin"></app-courses-list>
+    </ng-container>
+    <ng-template #noCourses>
+      <app-info title="Your List is Empty" text="Please use 'Add New Course' button to add your first course">
+        <app-button buttonText="Add new course" routerLink="/courses/add"></app-button>
+      </app-info>
+    </ng-template>
   </div>
-  <div *ngIf="courses != null">
-    <app-courses-list [courses]="courses" [editable]="isAdmin"></app-courses-list>
-  </div>
-  <div *ngIf="courses == null || courses.length === 0">
-    <app-info title="Your List is Empty" text="Please use 'Add New Course' button to add your first course">
-      <app-button buttonText="Add new course" routerLink="/courses/add"></app-button>
-    </app-info>
-  </div>
-</div>
+</ng-template>
+
+<ng-template #loading>Loading...</ng-template>
